@@ -1,8 +1,8 @@
 import CoreData
 
 public class CoreDataProvider {
-    let context: NSManagedObjectContext
-    let coreData: CoreData
+    public let context: NSManagedObjectContext
+    public let coreData: CoreData
     
     public init(bundle: Bundle, containerName: String, inMemory: Bool = false) {
         let coreData = CoreData(bundle: bundle, containerName: containerName, inMemory: inMemory)
@@ -11,7 +11,7 @@ public class CoreDataProvider {
     }
 }
 
-class CoreData {
+public class CoreData {
     let bundle: Bundle
     let containerName: String
     let inMemory: Bool
