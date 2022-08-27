@@ -9,15 +9,27 @@ public class CoreDataProvider {
         self.context = coreData.context
         self.coreData = coreData
     }
+    
+    public init(for appGroup: String, containerName: String, inMemory: Bool = false) {
+        let coreData = CoreData(for: appGroup, containerName: containerName)
+        self.context = coreData.context
+        self.coreData = coreData
+    }
 }
 
 public class CoreData {
-    let bundle: Bundle
+    let modelURL: URL
     let containerName: String
     let inMemory: Bool
     
     init(bundle: Bundle, containerName: String, inMemory: Bool = false) {
-        self.bundle = bundle
+        self.modelURL = bundle.url(forResource: containerName, withExtension: "momd")!
+        self.containerName = containerName
+        self.inMemory = inMemory
+    }
+    
+    init(for appGroup: String, containerName: String, inMemory: Bool = false) {
+        self.modelURL = URL.storeURL(for: appGroup, databaseName: containerName)
         self.containerName = containerName
         self.inMemory = inMemory
     }
@@ -31,7 +43,7 @@ public class CoreData {
     
     lazy var persistentContainer: NSPersistentContainer = {
         debugPrint("Store Init")
-        let modelURL = bundle.url(forResource: containerName, withExtension: "momd")!
+        
         let model = NSManagedObjectModel(contentsOf: modelURL)
         let container = PersistentContainer(name: containerName, managedObjectModel: model!)
         
