@@ -10,8 +10,8 @@ public class CoreDataProvider {
         self.coreData = coreData
     }
     
-    public init(for appGroup: String, containerName: String, inMemory: Bool = false) {
-        let coreData = CoreData(for: appGroup, containerName: containerName)
+    public init(bundle: Bundle, for appGroup: String, containerName: String, inMemory: Bool = false) {
+        let coreData = CoreData(bundle: bundle, for: appGroup, containerName: containerName)
         self.context = coreData.context
         self.coreData = coreData
     }
@@ -19,17 +19,20 @@ public class CoreDataProvider {
 
 public class CoreData {
     let modelURL: URL
+    let storeURL: URL?
     let containerName: String
     let inMemory: Bool
     
     init(bundle: Bundle, containerName: String, inMemory: Bool = false) {
         self.modelURL = bundle.url(forResource: containerName, withExtension: "momd")!
+        self.storeURL = nil
         self.containerName = containerName
         self.inMemory = inMemory
     }
     
-    init(for appGroup: String, containerName: String, inMemory: Bool = false) {
-        self.modelURL = URL.storeURL(for: appGroup, databaseName: containerName)
+    init(bundle: Bundle, for appGroup: String, containerName: String, inMemory: Bool = false) {
+        self.modelURL = bundle.url(forResource: containerName, withExtension: "momd")!
+        self.storeURL = URL.storeURL(for: appGroup, databaseName: containerName)
         self.containerName = containerName
         self.inMemory = inMemory
     }
@@ -46,6 +49,12 @@ public class CoreData {
         
         let model = NSManagedObjectModel(contentsOf: modelURL)
         let container = PersistentContainer(name: containerName, managedObjectModel: model!)
+        
+        if !inMemory, let storeURL {
+            let description = NSPersistentStoreDescription()
+            description.url = storeURL
+            container.persistentStoreDescriptions = [description]
+        }
         
         if inMemory {
             let description = NSPersistentStoreDescription()
