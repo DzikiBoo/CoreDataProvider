@@ -50,7 +50,7 @@ public class CoreData {
         let model = NSManagedObjectModel(contentsOf: modelURL)
         let container = PersistentContainer(name: containerName, managedObjectModel: model!)
         
-        if !inMemory, let storeURL {
+        if !inMemory, let storeURL = storeURL {
             let description = NSPersistentStoreDescription()
             description.url = storeURL
             container.persistentStoreDescriptions = [description]
