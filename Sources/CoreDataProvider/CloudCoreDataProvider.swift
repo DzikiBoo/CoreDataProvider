@@ -52,9 +52,10 @@ public class CloudCoreData {
         if let storeURL = storeURL {
             let description = NSPersistentStoreDescription()
             description.url = storeURL
-            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            //description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
             container.persistentStoreDescriptions = [description]
         }
+        container.persistentStoreDescriptions.first!.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         
         container.loadPersistentStores(completionHandler: { storeDescription, error in
             if let error = error as NSError? {
