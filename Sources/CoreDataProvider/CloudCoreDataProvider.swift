@@ -2,16 +2,16 @@ import CoreData
 
 public class CloudCoreDataProvider {
     public let context: NSManagedObjectContext
-    public let coreData: CoreData
+    public let coreData: CloudCoreData
     
     public init(bundle: Bundle, containerName: String) {
-        let coreData = CoreData(bundle: bundle, containerName: containerName)
+        let coreData = CloudCoreData(bundle: bundle, containerName: containerName)
         self.context = coreData.context
         self.coreData = coreData
     }
     
     public init(bundle: Bundle, for appGroup: String, containerName: String) {
-        let coreData = CoreData(bundle: bundle, for: appGroup, containerName: containerName)
+        let coreData = CloudCoreData(bundle: bundle, for: appGroup, containerName: containerName)
         self.context = coreData.context
         self.coreData = coreData
     }
